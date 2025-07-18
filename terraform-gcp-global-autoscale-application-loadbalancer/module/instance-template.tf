@@ -5,9 +5,18 @@ resource "google_service_account" "bankapp_sa" {
 }
 
 # Attached GCP IAM Role to Service Account 
-resource "google_project_iam_binding" "bankapp_gke_sa_role" {
+resource "google_project_iam_binding" "bankapp_gke_sa_metric_role" {
   project = var.project_name  ### Project ID for your Google Account
   role    = "roles/monitoring.metricWriter"
+  members = [
+    "serviceAccount:${google_service_account.bankapp_sa.email}",
+  ]
+}
+
+# Attached GCP IAM Role to Service Account
+resource "google_project_iam_binding" "bankapp_gke_sa_log_role" {
+  project = var.project_name  ### Project ID for your Google Account
+  role    = "roles/logging.logWriter"
   members = [
     "serviceAccount:${google_service_account.bankapp_sa.email}",
   ]
